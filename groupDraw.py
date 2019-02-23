@@ -239,7 +239,7 @@ class Draw():
                     x1 = end[0]
                     y1 = end[1]
 
-                print('edge\t{}'.format(edge))
+                #print('edge\t{}'.format(edge))
                 bondingNum = dire[int(edge[1]) - 1]
                 direction = edge[2]
                 self.dr.drawLine(x0, y0, x1, y1, bondingNum, direction)
@@ -269,8 +269,8 @@ def getNodeCoordinatefromMaps(molecularMaps, node):
     for m in molecularMaps:
         x_temp = m[node].coordinate[0]
         y_temp = m[node].coordinate[1]
-        if x_base: x_base = x_temp
-        if y_base: y_base = y_temp
+        if x_temp: x_base = x_temp
+        if y_temp: y_base = y_temp
     return x_base, y_base
 
 def getCircleCenter(molecularMaps, circle):
@@ -374,9 +374,9 @@ def setGroupsCoordinate(circles, groups, elements, topology, molecularMap):
 
         index = circle[0]
 
+        #ToDo
         if count == 1:
-            x_base = 150
-            y_base = 150
+            pass
 
         mole_temp = shiftMolecularMap(index, x_base, y_base, -math.pi/3, mole_temp)
 
@@ -408,4 +408,4 @@ def drawGroup(originalFomularPath, outFomularPath):
 
 
 if __name__ == '__main__':
-   drawGroup('arrayInputs/C10O2.txt', 'arrayInputs/C10O2.txt')
+    drawGroup('arrayInputs/C13.txt', 'arrayInputs/C13.txt')

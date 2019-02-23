@@ -132,7 +132,7 @@ def splitCircles(circles, topology):
     print('拆分多环 ：')
     if len(circles) == 0 or len(circles) == 1:
         print('\t无多环结构，不需拆分')
-        return circles, topology
+        return circles
 
     print("\t存在{}个不同环".format(len(circles)))
 

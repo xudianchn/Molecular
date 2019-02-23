@@ -165,7 +165,6 @@ def setLinkNodesCoordinate(startNodes, molecularMap, topology, elements):
                     y1 += molecularMap[node2[0]].coordinate[1]
                 x1 = x1 / len(settleNodes)
                 y1 = y1 / len(settleNodes)
-                if elements[node2] ==
                 theta = math.atan2((y1 - y0), (x1 - x0)) + math.pi
 
                 x_tar = x0 + math.cos(theta) * 50
