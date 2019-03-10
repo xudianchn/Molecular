@@ -106,7 +106,7 @@ def setCircleNodesCoordinate(circleNodes, molecularMap, topology):
 
     if len(circleNodes) == 7:
         for i, node in enumerate(circleNodes[:-1]):
-            if i < 3:
+            if i < 2 or i > 4:
                 molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'down', topology)
             else:
                 molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'up', topology)
@@ -153,8 +153,8 @@ def setLinkNodesCoordinate(startNodes, molecularMap, topology, elements):
                     freeNodes.append(
                         (nextLayerNodeIndex, elements[nextLayerNodeIndex], topology[node][nextLayerNodeIndex]))
 
-            #print('\nCurrent Node {} {} {}'.format(nodeID, nodeElement, nodeCoord))
-            #print('SettleNodes {}  FreeNodes {}'.format(settleNodes, freeNodes))
+            # print('\nCurrent Node {} {} {}'.format(nodeID, nodeElement, nodeCoord))
+            # print('SettleNodes {}  FreeNodes {}'.format(settleNodes, freeNodes))
 
             if len(freeNodes) == 1:
                 x1 = 0
@@ -170,7 +170,7 @@ def setLinkNodesCoordinate(startNodes, molecularMap, topology, elements):
                 y_tar = y0 + math.sin(theta) * 50
 
                 molecularMap[freeNodes[0][0]].setCoordinate(x_tar, y_tar)
-                molecularMap[node].connect(molecularMap[freeNodes[0][0]], 'up', topology)
+                molecularMap[node].connect(molecularMap[freeNodes[0][0]], 'down', topology)
 
                 nextLayerNodes.append(freeNodes[0][0])
             elif len(freeNodes) == 2:
@@ -214,8 +214,8 @@ class Draw():
             start = (molecularMap[i].coordinate[0], molecularMap[i].coordinate[1])
 
             startElement = molecularMap[i].element
-            #if startElement != 'C':
-            #    plt.text(start[0] - 7, start[1] - 7, startElement)
+            if startElement != 'C':
+               plt.text(start[0] - 7, start[1] - 7, startElement)
 
             plt.text(start[0] + 3, start[1] + 3, i)
 
@@ -239,7 +239,7 @@ class Draw():
                     x1 = end[0]
                     y1 = end[1]
 
-                #print('edge\t{}'.format(edge))
+                # print('edge\t{}'.format(edge))
                 bondingNum = dire[int(edge[1]) - 1]
                 direction = edge[2]
                 self.dr.drawLine(x0, y0, x1, y1, bondingNum, direction)
@@ -408,4 +408,4 @@ def drawGroup(originalFomularPath, outFomularPath):
 
 
 if __name__ == '__main__':
-    drawGroup('arrayInputs/C13.txt', 'arrayInputs/C13.txt')
+    drawGroup('arrayInputs/C7H6O3.txt', 'arrayInputs/C7H6O3.txt')

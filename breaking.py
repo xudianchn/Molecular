@@ -9,7 +9,7 @@ global Txt
 写出字典格式，类似1:C 2:O 查询
 """
 Atom_temp = []
-f = open("C7H6O3.txt")
+f = open("arrayInputs/C7H6O3.txt")
 line = f.readline()
 while line:
     s = line[:1]
@@ -26,7 +26,7 @@ f.close()
 从txt中读取二维数组
 """
 Connect_temp = []
-f = open("C7H6O3.txt")
+f = open("arrayInputs/C7H6O3.txt")
 line = f.readline()
 while line:
     t = line[3:-2]
@@ -45,7 +45,7 @@ Connect = np.array(Connect)
 f.close()
 
 Txt = []
-f = open("C7H6O3.txt")
+f = open("arrayInputs/C7H6O3.txt")
 line = f.readline()
 while line:
     line = line.strip()

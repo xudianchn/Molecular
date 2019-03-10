@@ -57,5 +57,5 @@ if __name__ == '__main__':
     draw = chemistryDraw()
     draw.drawLine(0, 0, 50, 0, 'single')
     draw.drawLine(50, 0, 75, -43, 'double')
-    draw.drawLine(75, -43, 75, -93, 'triple')
+    # draw.drawLine(75, -43, 75, -93, 'triple')
     draw.show()
