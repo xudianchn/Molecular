@@ -156,7 +156,7 @@ def setLinkNodesCoordinate(startNodes, molecularMap, topology, elements):
             # print('\nCurrent Node {} {} {}'.format(nodeID, nodeElement, nodeCoord))
             # print('SettleNodes {}  FreeNodes {}'.format(settleNodes, freeNodes))
 
-            if len(freeNodes) == 1:
+            if len(freeNodes) == 1 and layerIndex == 0:
                 x1 = 0
                 y1 = 0
                 for node2 in settleNodes:
@@ -170,7 +170,7 @@ def setLinkNodesCoordinate(startNodes, molecularMap, topology, elements):
                 y_tar = y0 + math.sin(theta) * 50
 
                 molecularMap[freeNodes[0][0]].setCoordinate(x_tar, y_tar)
-                molecularMap[node].connect(molecularMap[freeNodes[0][0]], 'down', topology)
+                molecularMap[node].connect(molecularMap[freeNodes[0][0]], 'up', topology)
 
                 nextLayerNodes.append(freeNodes[0][0])
             elif len(freeNodes) == 2:
@@ -194,6 +194,23 @@ def setLinkNodesCoordinate(startNodes, molecularMap, topology, elements):
                 molecularMap[freeNodes[1][0]].setCoordinate(x2_tar, y2_tar)
                 molecularMap[node].connect(molecularMap[freeNodes[1][0]], 'up', topology)
                 nextLayerNodes.append(freeNodes[1][0])
+            elif len(freeNodes) == 1 and layerIndex != 0:
+                x1 = 0
+                y1 = 0
+                for node2 in settleNodes:
+                    x1 += molecularMap[node2[0]].coordinate[0]
+                    y1 += molecularMap[node2[0]].coordinate[1]
+                x1 = x1 / len(settleNodes)
+                y1 = y1 / len(settleNodes)
+                theta = math.atan2((y1 - y0), (x1 - x0)) + math.pi
+
+                x3_tar = x0 + math.cos(theta + math.pi / 3) * 50
+                y3_tar = y0 + math.sin(theta + math.pi / 3) * 50
+
+                molecularMap[freeNodes[0][0]].setCoordinate(x3_tar, y3_tar)
+                molecularMap[node].connect(molecularMap[freeNodes[0][0]], 'down', topology)
+
+                nextLayerNodes.append(freeNodes[0][0])
 
         print('nextLayerNodes {}'.format(nextLayerNodes))
         layerNodes = nextLayerNodes
