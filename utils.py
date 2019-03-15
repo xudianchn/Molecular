@@ -221,6 +221,9 @@ def getGroupRepeatLine(settleCircles, settleGroups, circle, group):
         else:
             indirectNodes.append(node)
     "这三个判断添加 指的是什么情况"
+    #cir_cir:环和环直接相连的点
+    #cir_group:环和组连接的点(不包含环和环直接相连)
+    #indirectNodes:不直接相连的点，即出现在新组里，但是没有出现在前面已经固定的组里的树枝节点
 
     return cir_cirNodes, cir_groupNodes, indirectNodes
 

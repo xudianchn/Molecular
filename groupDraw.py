@@ -20,10 +20,12 @@ class AtomNode:
         self.edges.append(edge)
 
     "edge指的是什么"
+    #Edge指连接的边，不用管叫什么，要弄清楚edge里面包含的是什么:连接的Node，键数，方向(二键有用)
     def setCoordinate(self, x, y):
         self.coordinate = [x, y, True]
 
     "setCoordinate是将函数坐标确定吗"
+    #对
     def showInfo(self):
         print('----- {} ----- '.format(self.ID))
         print('元素: {}  坐标: {}'.format(self.element, self.coordinate))
@@ -56,6 +58,7 @@ def shiftMolecularMap(index, x, y ,theta, molecularMap):
         x_ori = node.coordinate[0]
         y_ori = node.coordinate[1]
         "node指的是什么"
+        #class Node，这个结构里的点
         r = math.sqrt(x_ori*x_ori + y_ori*y_ori)
         theta_new = math.atan2(y_ori, x_ori) + theta
         x_new = r*math.cos(theta_new)
@@ -155,6 +158,10 @@ def setLinkNodesCoordinate(startNodes, molecularMap, topology, elements):
                     freeNodes.append(
                         (nextLayerNodeIndex, elements[nextLayerNodeIndex], topology[node][nextLayerNodeIndex]))
             "这两个判断指的是什么，checkednodes，nextLayerNodeIndex指的是什么"
+            #检测过的点，下一层中点标号(对应txt中的顺序)
+            #你应该看checkedNodes是什么时候生成的，什么时候变化的，就知道它的作用是干嘛了
+            #checkedNodes被放入了settleNodes，即坐标已经定位好的点集，为定位的点依靠定位好的点定位，所以要做这个区分
+
             print('\nCurrent Node {} {} {}'.format(nodeID, nodeElement, nodeCoord))
             print('SettleNodes {}  FreeNodes {}'.format(settleNodes, freeNodes))
 
@@ -330,6 +337,7 @@ def getLinkNode(settledGroups, settleCircles, newGroup, newCircle, molecularMap,
     x_base = 0
     y_base = 0
     "这个函数的作用"
+    #找不同Groups间的连接线(group可能有重复部分)，为枝或者环上的点
     cir_cirNodes, cir_groupNodes, indirectNodes = getGroupRepeatLine(settleCircles, settledGroups, newCircle, newGroup)
     removeNodes = indirectNodes
 
@@ -378,6 +386,7 @@ def setGroupsCoordinate(circles, groups, elements, topology, molecularMap):
     molecularMaps = []
     settledCircles = []
     "这个函数的原理"
+    #没懂这个问法，具体需要讲什么
     count = 0
     for circle, group in zip(circles, groups):
         print('\t设定环 {} 组 {}'.format(circle, group))
