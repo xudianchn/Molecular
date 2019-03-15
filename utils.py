@@ -220,12 +220,13 @@ def getGroupRepeatLine(settleCircles, settleGroups, circle, group):
             cir_groupNodes.append(node)
         else:
             indirectNodes.append(node)
+    "这三个判断添加 指的是什么情况"
 
     return cir_cirNodes, cir_groupNodes, indirectNodes
 
 
 if __name__ == '__main__':
-    topology, elements = buildTopology('./arrayInputs/C13.txt')
+    topology, elements = buildTopology('./arrayInputs/SULFATHIAZOLE.txt')
     print(topology)
     initt = time.time()
     circles = getCircles(topology)
