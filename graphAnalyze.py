@@ -306,4 +306,4 @@ def drawReaction(originalFomularPath, outFomularPath):
 
 
 if __name__ == '__main__':
-   drawReaction('arrayInputs/C7H6O3.txt', 'arrayInputs/C7H6O3.txt')
+   drawReaction('arrayInputs/C7H6O3.txt', 'arrayInputs/C7H6O3Out2.txt')

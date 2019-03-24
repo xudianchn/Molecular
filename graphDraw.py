@@ -12,8 +12,8 @@ class chemistryDraw:
         plt.xticks(())
         plt.yticks(())
 
-        plt.xlim((-300, 300))
-        plt.ylim((-300, 300))
+        plt.xlim((-400, 400))
+        plt.ylim((-400, 400))
 
     #typ是画线种类, single单线, double双键, triple三键
     #只有双键需要指定方向(第二键是在哪个方向画出,对于环必须正确指定)
@@ -57,5 +57,5 @@ if __name__ == '__main__':
     draw = chemistryDraw()
     draw.drawLine(0, 0, 50, 0, 'single')
     draw.drawLine(50, 0, 75, -43, 'double')
-    # draw.drawLine(75, -43, 75, -93, 'triple')
+    draw.drawLine(75, -43, 75, -93, 'triple')
     draw.show()

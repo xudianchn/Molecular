@@ -220,7 +220,7 @@ def getGroupRepeatLine(settleCircles, settleGroups, circle, group):
             cir_groupNodes.append(node)
         else:
             indirectNodes.append(node)
-    "这三个判断添加 指的是什么情况"
+    # "这三个判断添加 指的是什么情况"
     #cir_cir:环和环直接相连的点
     #cir_group:环和组连接的点(不包含环和环直接相连)
     #indirectNodes:不直接相连的点，即出现在新组里，但是没有出现在前面已经固定的组里的树枝节点
@@ -229,7 +229,7 @@ def getGroupRepeatLine(settleCircles, settleGroups, circle, group):
 
 
 if __name__ == '__main__':
-    topology, elements = buildTopology('./arrayInputs/SULFATHIAZOLE.txt')
+    topology, elements = buildTopology('./arrayInputs/JIANG.txt')
     print(topology)
     initt = time.time()
     circles = getCircles(topology)
@@ -249,3 +249,6 @@ if __name__ == '__main__':
         print('cir_cirNodes {}'.format(cir_cirNodes))
         print('cir_groupNodes {}'.format(cir_groupNodes))
         print('indirectNodes {}'.format(indirectNodes))
+        print(circles)
+    # for top in circles:
+    #     print(top)
