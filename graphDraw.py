@@ -12,8 +12,8 @@ class chemistryDraw:
         plt.xticks(())
         plt.yticks(())
 
-        plt.xlim((-400, 400))
-        plt.ylim((-400, 400))
+        plt.xlim((-500, 500))
+        plt.ylim((-500, 500))
 
     #typ是画线种类, single单线, double双键, triple三键
     #只有双键需要指定方向(第二键是在哪个方向画出,对于环必须正确指定)

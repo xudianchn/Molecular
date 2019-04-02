@@ -79,7 +79,6 @@ def shiftMolecularMap(index, x, y ,theta, molecularMap):
         node.setCoordinate(x_new, y_new)
     return  molecularMap
 
-
 def setCircleNodesCoordinate(circleNodes, molecularMap, topology):
     '''
     检测得到基准环后，设定基准环的坐标
@@ -107,7 +106,7 @@ def setCircleNodesCoordinate(circleNodes, molecularMap, topology):
 
     if len(circleNodes) == 7:
         for i, node in enumerate(circleNodes[:-1]):
-            if i < 2 or i > 4:
+            if i < 3:
                 molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'down', topology)
             else:
                 molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'up', topology)
@@ -192,7 +191,7 @@ def setLinkNodesCoordinate(startNodes, molecularMap, topology, elements):
                 y3_tar = y0 + math.sin(theta + math.pi / 3) * 50
 
                 molecularMap[freeNodes[0][0]].setCoordinate(x3_tar, y3_tar)
-                molecularMap[node].connect(molecularMap[freeNodes[0][0]], 'down', topology)
+                molecularMap[node].connect(molecularMap[freeNodes[0][0]], 'up', topology)
 
                 nextLayerNodes.append(freeNodes[0][0])
             elif len(freeNodes) == 2:
@@ -204,6 +203,9 @@ def setLinkNodesCoordinate(startNodes, molecularMap, topology, elements):
                 x1 = x1 / len(settleNodes)
                 y1 = y1 / len(settleNodes)
                 theta = math.atan2((y1 - y0), (x1 - x0)) + math.pi
+
+                if freeNodes[0][1] == 'C':
+                    freeNodes[0], freeNodes[1] = freeNodes[1], freeNodes[0]
 
                 x1_tar = x0 + math.cos(theta + math.pi / 3) * 50
                 y1_tar = y0 + math.sin(theta + math.pi / 3) * 50
@@ -226,20 +228,20 @@ def setLinkNodesCoordinate(startNodes, molecularMap, topology, elements):
                 y1 = y1 / len(settleNodes)
                 theta = math.atan2((y1 - y0), (x1 - x0)) + math.pi
 
-                x4_tar = x0 + math.cos(theta + math.pi / 2) * 50
-                y4_tar = y0 + math.sin(theta + math.pi / 2) * 50
+                x4_tar = x0 + math.cos(theta - math.pi / 2) * 50
+                y4_tar = y0 + math.sin(theta - math.pi / 2) * 50
                 molecularMap[freeNodes[0][0]].setCoordinate(x4_tar, y4_tar)
-                molecularMap[node].connect(molecularMap[freeNodes[0][0]], 'down', topology)
+                molecularMap[node].connect(molecularMap[freeNodes[0][0]], 'up', topology)
 
                 x5_tar = x0 + math.cos(theta) * 50
                 y5_tar = y0 + math.sin(theta) * 50
                 molecularMap[freeNodes[1][0]].setCoordinate(x5_tar, y5_tar)
-                molecularMap[node].connect(molecularMap[freeNodes[1][0]], 'down', topology)
+                molecularMap[node].connect(molecularMap[freeNodes[1][0]], 'up', topology)
 
-                x6_tar = x0 + math.cos(theta - math.pi / 2) * 50
-                y6_tar = y0 + math.sin(theta - math.pi / 2) * 50
+                x6_tar = x0 + math.cos(theta + math.pi / 2) * 50
+                y6_tar = y0 + math.sin(theta + math.pi / 2) * 50
                 molecularMap[freeNodes[2][0]].setCoordinate(x6_tar, y6_tar)
-                molecularMap[node].connect(molecularMap[freeNodes[2][0]], 'down', topology)
+                molecularMap[node].connect(molecularMap[freeNodes[2][0]], 'up', topology)
 
                 nextLayerNodes.append(freeNodes[0][0])
                 nextLayerNodes.append(freeNodes[1][0])
@@ -258,17 +260,18 @@ class Draw():
         pass
         self.dr = chemistryDraw()
 
-    def draw(self, molecularMap, topology, info = None):
+    def draw(self, molecularMap, group, info = None):
         dire = ['single', 'double', 'triple']
 
-        for i in range(len(topology[0])):
+        for t in range(len(group)):
+            i = group[t]
             start = (molecularMap[i].coordinate[0], molecularMap[i].coordinate[1])
 
             startElement = molecularMap[i].element
             if startElement != 'C':
-               plt.text(start[0] - 7, start[1] - 7, startElement)
+                plt.text(start[0] - 7, start[1] - 7, startElement)
 
-            # plt.text(start[0] + 3, start[1] + 3, i)
+            plt.text(start[0] + 3, start[1] + 3, i)
 
             for edge in molecularMap[i].edges:
                 endElement = edge[0].element
@@ -348,13 +351,13 @@ def getCircleCenter(molecularMaps, circle):
 
     x = 0
     y = 0
-    for node in circle:
+    for node in circle[:-1]:
         x += molecularMap[node].coordinate[0]
         y += molecularMap[node].coordinate[1]
 
 
-    x = x/len(circle)
-    y = y/len(circle)
+    x = x/(len(circle)-1)
+    y = y/(len(circle)-1)
     return x, y
 
 
@@ -362,6 +365,7 @@ def getLinkNode(settledGroups, settleCircles, newGroup, newCircle, molecularMap,
     nodeIndex = 0
     x_base = 0
     y_base = 0
+    connectCircle = None
     # "这个函数的作用"
     #找不同Groups间的连接线(group可能有重复部分)，为枝或者环上的点
     cir_cirNodes, cir_groupNodes, indirectNodes = getGroupRepeatLine(settleCircles, settledGroups, newCircle, newGroup)
@@ -375,7 +379,6 @@ def getLinkNode(settledGroups, settleCircles, newGroup, newCircle, molecularMap,
 
     if len(cir_cirNodes) == 2:
 
-        connectCircle = None
         for circle in circles:
             flag = True
             for node in cir_cirNodes:
@@ -388,11 +391,10 @@ def getLinkNode(settledGroups, settleCircles, newGroup, newCircle, molecularMap,
         print('connectCircle\t{}'.format(connectCircle))
         anchor_centerx, anchor_centery = getCircleCenter(molecularMaps, connectCircle)
 
-
         x1, y1 = getNodeCoordinatefromMaps(molecularMaps, cir_cirNodes[0])
         x2, y2 = getNodeCoordinatefromMaps(molecularMaps, cir_cirNodes[1])
 
-        x_base = x2+100
+        x_base = x2
         y_base = y2
     print(x_base)
     print(y_base)
@@ -400,7 +402,7 @@ def getLinkNode(settledGroups, settleCircles, newGroup, newCircle, molecularMap,
     print('cir_cirLinkNodes {}'.format(cir_cirNodes))
     print('cir_groupLinkNodes {}'.format(cir_groupNodes))
     print('indirectConnectNodes {}'.format(indirectNodes))
-    return nodeIndex, x_base, y_base, removeNodes
+    return nodeIndex, x_base, y_base, removeNodes, connectCircle, cir_cirNodes, cir_groupNodes
 
 
 def setGroupsCoordinate(circles, groups, elements, topology, molecularMap):
@@ -413,92 +415,92 @@ def setGroupsCoordinate(circles, groups, elements, topology, molecularMap):
     settledNodes = []
     molecularMaps = []
     settledCircles = []
+    createcoordinate = []
     count = 0
-    for circle, group in zip(circles, groups):
-        print('\t设定环 {} 组 {}'.format(circle, group))
-        mole_temp = copy.deepcopy(molecularMap)
 
-        nodeIndex, x_base, y_base, removeNodes = getLinkNode(settledNodes, settledCircles, group, circle, molecularMap, molecularMaps,topology,circles)
+    for circle, group in zip(circles, groups):
+        mole_temp = copy.deepcopy(molecularMap)
+        nodeIndex, x_base, y_base, removeNodes, connectCircle, cir_cirNodes, cir_groupnodes = getLinkNode(settledNodes, settledCircles, group, circle, molecularMap, molecularMaps,topology,circles)
         for removeNode in removeNodes:
             group.remove(removeNode)
-
+        print('\t设定环 {} 组 {}'.format(circle, group))
         topo_temp = getBreakTopology(topology, group)
+        # if connectCircle != None:
+        #     if circle[0] not in connectCircle or circle[1] not in connectCircle:
+        #         circle.reverse()
+        #     if topo_temp[cir_cirNodes[0]][cir_cirNodes[1]] == 2:
+        #         topo_temp[cir_cirNodes[0]][cir_cirNodes[1]] = 1
         mole_temp = setCircleNodesCoordinate(circle, mole_temp, topo_temp)
         mole_temp = setLinkNodesCoordinate(circle, mole_temp, topo_temp, elements)
 
         index = circle[0]
 
-        #ToDo
-        if count == 1:
-            pass
+        if len(molecularMaps) > 0 and len(cir_groupnodes) > 0:
+            for i in range(len(molecularMaps[count-1])):
+                if len(molecularMaps[count-1][i].edges):
+                    for j in range(len(molecularMaps[count-1][i].edges)):
+                        if molecularMaps[count-1][i].edges[j][0].ID == cir_groupnodes[0] or molecularMaps[count-1][i].edges[j][0].ID == cir_groupnodes[0]:
+                            connectnodes = i
 
+                            x21 = molecularMaps[count - 1][connectnodes].coordinate[0]
+                            y21 = molecularMaps[count - 1][connectnodes].coordinate[1]
 
-        mole_temp = shiftMolecularMap(index, x_base, y_base, -math.pi/3, mole_temp)
+                            x22 = molecularMaps[count-1][cir_groupnodes[0]].coordinate[0]
+                            y22 = molecularMaps[count-1][cir_groupnodes[0]].coordinate[1]
 
+                            shiftangel = math.atan2((y21-y22), (x21-x22))
+
+        if count == 0:
+            mole_temp = shiftMolecularMap(index, x_base, y_base, -math.pi/3, mole_temp)
+        if count >= 1:
+            mole_temp = shiftMolecularMap(index, x_base, y_base, -math.pi/3 -(math.pi*2/3 - shiftangel), mole_temp)
         settledNodes += group
         settledCircles += circle
         molecularMaps.append(mole_temp)
-        dr.draw(mole_temp, topo_temp)
-
+        createcoordinate.append([x_base, y_base])
+        dr.draw(mole_temp, group)
         count += 1
     dr.show()
-
+    return molecularMaps, createcoordinate
 
 def drawGroup(originalFomularPath, outFomularPath):
-
     # 反应物
     topology, elements = buildTopology(originalFomularPath)
     circles = getCircles(topology)
     cleanCircles = splitCircles(circles, topology)
     groups = breakCircles(cleanCircles, topology)
     molecularMap = buildMolecularMap(elements)
-    # startLayer = None
-    # if circles:
-    #     molecularMap = setCircleNodesCoordinate(circles[0], molecularMap, topology)
-    #     startLayer = circles[0]
-    # else:
-    #     startNode = None
-    #     for i, element in enumerate(elements):
-    #         if element == 'C':
-    #             startNode = i
-    #             break
-    #     molecularMap[startNode].setCoordinate(0, 0)
-    #     secondNode = None
-    #     for i, b in enumerate(topology[startNode]):
-    #         if b: secondNode = i
-    #     molecularMap[secondNode].setCoordinate(50, 0)
-    #     molecularMap[startNode].connect(molecularMap[secondNode], 'up', topology)
-    #     startLayer = [startNode, secondNode]
+    molecularMaps, createcoordinate = setGroupsCoordinate(cleanCircles, groups, elements, topology, molecularMap)
 
-    # molecularMap = setLinkNodesCoordinate(startLayer, molecularMap, topology, elements)
-    setGroupsCoordinate(cleanCircles, groups, elements, topology, molecularMap)
+    dr = Draw()
 
-    # # 生成物
-    # outTopology, outelements = buildTopology(outFomularPath)
-    # outMolecularMap = copy.deepcopy(molecularMap)
-    # for i in range(len(outelements)):
-    #     outMolecularMap[i].edges = []
-    #     connects = [index for index, b in enumerate(outTopology[i]) if b]
-    #     for connect in connects:
-    #         if topology[i][connect] == outTopology[i][connect]:
-    #             edges = molecularMap[i].edges
-    #             direction = None
-    #             for edge in edges:
-    #                 if edge[0].ID == connect:
-    #                     direction = edge[2]
-    #             if direction:
-    #                 outMolecularMap[i].connect(outMolecularMap[connect], direction, outTopology)
-    #         elif topology[i][connect] > 0:
-    #             outMolecularMap[i].connect(outMolecularMap[connect], 'up', outTopology)
-    #         else:
-    #             pass
-    # outMolecularMap1 = shiftMolecularMap(0, 0, 0, math.pi*5/3, outMolecularMap)
-    # # setGroupsCoordinate(cleanCircles, groups, elements, outTopology, outMolecularMap1)
-    # dr = Draw()
-    # dr.draw(outMolecularMap1, outTopology)
-    # dr.show()
-
-
+    # 生成物
+    outTopology, outelements = buildTopology(outFomularPath)
+    count = 0
+    for a in range(len(molecularMaps)):
+        outMolecularMap = copy.deepcopy(molecularMaps[a])
+        for i in range(len(outelements)):
+            outMolecularMap[i].edges = []
+            connects = [index for index, b in enumerate(outTopology[i]) if b]
+            for connect in connects:
+                if topology[i][connect] == outTopology[i][connect]:
+                    edges = molecularMaps[a][i].edges
+                    direction = None
+                    for edge in edges:
+                        if edge[0].ID == connect:
+                            direction = edge[2]
+                    if direction:
+                        outMolecularMap[i].connect(outMolecularMap[connect], direction, outTopology)
+                elif topology[i][connect] > 0 and connect in groups[a]:
+                    outMolecularMap[i].connect(outMolecularMap[connect], 'up', outTopology)
+                else:
+                    pass
+        outMolecularMap1 = shiftMolecularMap(0, createcoordinate[a][0], createcoordinate[a][1], 0, outMolecularMap)
+        # if count == 1:
+        dr.draw(outMolecularMap1, groups[a])
+        print(outMolecularMap[13].edges)
+        count +=1
+    dr.show()
 
 if __name__ == '__main__':
-    drawGroup('arrayInputs/JIANG.txt', 'arrayInputs/JIANG.txt')
+    drawGroup('arrayInputs/JIANG.txt', 'arrayInputs/JIANG3.txt')
