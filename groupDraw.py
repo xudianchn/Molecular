@@ -114,7 +114,7 @@ def setCircleNodesCoordinate(circleNodes, molecularMap, topology, shiftangel):
                     molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'up', topology)
 
             elif shiftangel == math.pi*7/6:
-                if i < 3 or i > 4:
+                if i < 4:
                     molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'down', topology)
                 else:
                     molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'up', topology)
@@ -138,7 +138,7 @@ def setCircleNodesCoordinate(circleNodes, molecularMap, topology, shiftangel):
                     molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'up', topology)
 
             elif shiftangel == math.pi/2:
-                if i < 3 or i > 4:
+                if i < 2 or i > 3:
                     molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'down', topology)
                 else:
                     molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'up', topology)
@@ -150,7 +150,7 @@ def setCircleNodesCoordinate(circleNodes, molecularMap, topology, shiftangel):
                     molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'down', topology)
 
             elif shiftangel == math.pi/6:
-                if i < 3 or i > 4:
+                if i < 1 or i > 2:
                     molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'down', topology)
                 else:
                     molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'up', topology)
@@ -162,7 +162,7 @@ def setCircleNodesCoordinate(circleNodes, molecularMap, topology, shiftangel):
                     molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'down', topology)
 
             elif shiftangel == -math.pi/6:
-                if i < 3 or i > 4:
+                if i > 1:
                     molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'down', topology)
                 else:
                     molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'up', topology)
@@ -174,7 +174,7 @@ def setCircleNodesCoordinate(circleNodes, molecularMap, topology, shiftangel):
                     molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'down', topology)
 
             elif shiftangel == -math.pi/2:
-                if i < 3 or i > 4:
+                if 0 < i < 5:
                     molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'down', topology)
                 else:
                     molecularMap[node].connect(molecularMap[circleNodes[i + 1]], 'up', topology)
@@ -591,4 +591,4 @@ def drawGroup(originalFomularPath, outFomularPath):
     dr.show()
 
 if __name__ == '__main__':
-    drawGroup('arrayInputs/JIANG.txt', 'arrayInputs/JIANG1.txt')
+    drawGroup('arrayInputs/TANG.txt', 'arrayInputs/TANG1.txt')

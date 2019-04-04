@@ -249,6 +249,5 @@ if __name__ == '__main__':
         print('cir_cirNodes {}'.format(cir_cirNodes))
         print('cir_groupNodes {}'.format(cir_groupNodes))
         print('indirectNodes {}'.format(indirectNodes))
-        print(circles)
     # for top in circles:
     #     print(top)
