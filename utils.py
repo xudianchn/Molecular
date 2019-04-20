@@ -229,7 +229,7 @@ def getGroupRepeatLine(settleCircles, settleGroups, circle, group):
 
 
 if __name__ == '__main__':
-    topology, elements = buildTopology('./arrayInputs/JIANG.txt')
+    topology, elements = buildTopology('./arrayInputs/WU-copy out.txt')
     print(topology)
     initt = time.time()
     circles = getCircles(topology)
